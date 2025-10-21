@@ -6,20 +6,22 @@ FROM selenium/standalone-chrome:126.0
 USER root
 
 # Çalışma dizinini ayarlıyoruz
+# ... (Diğer satırlar aynı kalır) ...
+
+# Çalışma dizinini ayarlıyoruz
 WORKDIR /usr/src/app
 
 # requirements.txt dosyasını kopyalayıp Python bağımlılıklarını kuruyoruz
 COPY requirements.txt ./
-# Python kütüphanelerini kuruyoruz (Bu imajda zaten Python 3.11+ var)
-RUN pip install --no-cache-dir -r requirements.txt
+# 🛑 DÜZELTME: pip yerine pip3 kullanıyoruz
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Bot kodunu kopyalıyoruz
 COPY papel.py .
-# Proxy zip dosyalarını kopyalıyoruz
 COPY *.zip .
 
-# Ortam değişkenini ayarlıyoruz (Bu imaj, botu başlatmak için varsayılan olarak Python'ı kullanır)
+# Ortam değişkenini ayarlıyoruz (PATH'e python3 eklenmişti)
 ENV PATH="/usr/bin/python3:$PATH"
 
-# Botu çalıştırıyoruz
+# Botu çalıştırıyoruz (Bu da python3 olmalı)
 CMD ["python3", "papel.py"]
