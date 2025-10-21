@@ -244,16 +244,19 @@ def initialize_driver(user_id):
             logger.error(f"Proxy eklentisi oluşturma hatası: {e}")
             random_proxy = None # Hata durumunda proxy kullanımdan kaldırılır
             
-try:
+# initialize_driver fonksiyonunun içinde, try bloğu:
+    try:
         # RENDER KRİTİK AYARI: RENDER'ın Chromium'u bulması için
         # executable_path parametresini kullanıyoruz. Render'da genellikle bu yoldadır.
         driver = webdriver.Chrome(executable_path='/usr/bin/chromium-browser', options=chrome_options)
         driver.get(BASE_URL)
         return driver
+    # Varsa fazla boşlukları silip, try ile aynı hizada olduğundan emin olun:
     except Exception as e:
+        # Bu satır (logger.error), except'in 4 boşluk içeride olmalı:
         logger.error(f"FATAL RENDER HATA: Selenium Driver başlatılamadı. Hata: {type(e).__name__} - {e}")
         return None
-
+    
 def close_driver(key, context: CallbackContext):
     """Driver'ı kapatır ve kayıtları temizler. Driver'ı saklamak için benzersiz KEY kullanır."""
     
