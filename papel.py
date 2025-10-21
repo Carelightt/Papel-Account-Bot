@@ -247,18 +247,32 @@ def initialize_driver(user_id):
             random_proxy = None # Hata durumunda proxy kullanımdan kaldırılır
             
 # initialize_driver fonksiyonunun içinde, try bloğu:
+# initialize_driver fonksiyonunun içinde, try bloğu:
+# ... (chrome_options tanımlamalarından sonra) ...
+    
     try:
-        # RENDER KRİTİK AYARI: RENDER'ın Chromium'u bulması için
-        # executable_path parametresini kullanıyoruz. Render'da genellikle bu yoldadır.
         # 🛑 DÜZELTME: Service objesi oluşturuyoruz
-        # Render'daki Chromium yolu /usr/bin/chromium-browser
-        service = Service(executable_path='/usr/bin/chromium-browser')
+        # ChromeDriver'ın standart yolu /usr/local/bin/chromedriver olmalıdır.
+        CHROMEDRIVER_PATH = '/usr/local/bin/chromedriver'
         
-        # 🛑 DÜZELTME: Service objesi ile çağırıyoruz
+        # 1. ChromeDriver'ın çalıştırılabilir (executable) olduğundan emin oluyoruz.
+        # Bu, imajda bazen unutulan bir adımdır.
+        os.chmod(CHROMEDRIVER_PATH, 0o755) 
+        
+        # 2. Service objesi ile ChromeDriver'ın yolunu belirtiyoruz
+        service = Service(executable_path=CHROMEDRIVER_PATH)
+        
+        # 3. ChromeOptions'a tarayıcının (Chromium) yolunu ekliyoruz
+        # Bu, Service objesinin yanlış tarayıcıyı kullanmasını engeller.
+        chrome_options.binary_location = '/usr/bin/chromium-browser'
+        
+        # 4. WebDriver'ı, Service objesini kullanarak başlatıyoruz
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
         driver.get(BASE_URL)
         return driver
+    # ... (except kısmı aynı kalır) ...
+    
     # Varsa fazla boşlukları silip, try ile aynı hizada olduğundan emin olun:
     except Exception as e:
         # Bu satır (logger.error), except'in 4 boşluk içeride olmalı:
@@ -888,4 +902,5 @@ if __name__ == '__main__':
     # Bu veri, bot her yeniden başlatıldığında sıfırlanır, kalıcı depolama için farklı bir yöntem gerekir.
 
     main()
+
 
