@@ -29,7 +29,7 @@ from selenium.webdriver.chrome.service import Service
 # ==============================================================================
 
 # Lütfen TOKEN'ınızı buraya girin!
-TELEGRAM_TOKEN = "8472595823:AAGWK8H9YRtgr3PQ7OtZjt9FnPLXYwWj1Fg"
+TELEGRAM_TOKEN = "8472595823:AAFO4B_OPb_twBR8zXu-dsjrs4hkt0ra4oE"
 BASE_URL = "https://mywallet.papel.com.tr/register"
 
 # YÖNETİCİ AYARI: Sadece bu ID'ye sahip kullanıcı özel komutları kullanabilir.
@@ -888,3 +888,4 @@ if __name__ == '__main__':
     # Bu veri, bot her yeniden başlatıldığında sıfırlanır, kalıcı depolama için farklı bir yöntem gerekir.
 
     main()
+
