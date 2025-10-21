@@ -21,6 +21,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, InvalidElementStateException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+# 👇👇👇 KRİTİK IMPORT: Service objesi için eklendi 👇👇👇
+from selenium.webdriver.chrome.service import Service 
 
 # ==============================================================================
 # ⚠️ AYARLAR ⚠️
@@ -69,7 +71,7 @@ PROXY_LIST = [
     "118.193.59.17:17541", "118.193.59.92:17559", "118.193.59.165:17658",
     "107.150.117.248:17792", "118.193.59.165:17659", "118.193.59.165:17669",
     "118.193.59.87:17952", "118.193.59.17:17544", "118.193.59.17:17554",
-    "118.193.59.92:17570", "118.193.59.165:17661", "107.150.117.248:17796",
+    "118.१९3.59.92:17570", "118.193.59.165:17661", "107.150.117.248:17796",
     "118.193.59.87:17944", "107.150.117.248:17799", "118.193.59.92:17569",
     "118.193.59.165:17655", "118.193.59.165:17654", "118.193.59.17:17555",
     "107.150.117.248:17802", "118.193.59.92:17575", "118.193.59.165:17666",
@@ -248,7 +250,13 @@ def initialize_driver(user_id):
     try:
         # RENDER KRİTİK AYARI: RENDER'ın Chromium'u bulması için
         # executable_path parametresini kullanıyoruz. Render'da genellikle bu yoldadır.
-        driver = webdriver.Chrome(executable_path='/usr/bin/chromium-browser', options=chrome_options)
+        # 🛑 DÜZELTME: Service objesi oluşturuyoruz
+        # Render'daki Chromium yolu /usr/bin/chromium-browser
+        service = Service(executable_path='/usr/bin/chromium-browser')
+        
+        # 🛑 DÜZELTME: Service objesi ile çağırıyoruz
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+        
         driver.get(BASE_URL)
         return driver
     # Varsa fazla boşlukları silip, try ile aynı hizada olduğundan emin olun:
@@ -256,7 +264,7 @@ def initialize_driver(user_id):
         # Bu satır (logger.error), except'in 4 boşluk içeride olmalı:
         logger.error(f"FATAL RENDER HATA: Selenium Driver başlatılamadı. Hata: {type(e).__name__} - {e}")
         return None
-    
+        
 def close_driver(key, context: CallbackContext):
     """Driver'ı kapatır ve kayıtları temizler. Driver'ı saklamak için benzersiz KEY kullanır."""
     
