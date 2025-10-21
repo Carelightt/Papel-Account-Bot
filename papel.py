@@ -244,10 +244,10 @@ def initialize_driver(user_id):
             logger.error(f"Proxy eklentisi oluşturma hatası: {e}")
             random_proxy = None # Hata durumunda proxy kullanımdan kaldırılır
             
-    try:
-        # RENDER ORTAMI İÇİN KRİTİK: service_executable_path kullanmadan başlatmayı dene
-        # Render'da tarayıcı yolu genellikle '/usr/bin/chromium-browser' veya otomatiktir
-        driver = webdriver.Chrome(options=chrome_options)
+try:
+        # RENDER KRİTİK AYARI: RENDER'ın Chromium'u bulması için
+        # executable_path parametresini kullanıyoruz. Render'da genellikle bu yoldadır.
+        driver = webdriver.Chrome(executable_path='/usr/bin/chromium-browser', options=chrome_options)
         driver.get(BASE_URL)
         return driver
     except Exception as e:
@@ -875,4 +875,5 @@ def main() -> None:
 if __name__ == '__main__':
     # Bot_Data yapısını başlat: { chat_id: { 'rights': 0, 'accounts_opened': 0 } }
     # Bu veri, bot her yeniden başlatıldığında sıfırlanır, kalıcı depolama için farklı bir yöntem gerekir.
+
     main()
