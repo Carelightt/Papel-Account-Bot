@@ -1,29 +1,25 @@
-# Temel Python imajını kullanıyoruz
-FROM python:3.11-slim
+# 🛑 KRİTİK DEĞİŞİKLİK: Hazır Selenium Base İmajına geçiyoruz.
+# Bu imajın içinde Python, Java, Chrome, ChromeDriver hepsi kurulu ve hazırdır.
+FROM selenium/standalone-chrome:126.0
 
-# KRİTİK DNS ÇÖZÜMÜ: apt update başarısız olursa, DNS'i Google'a ayarlıyoruz.
-RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
-
-# Gerekli sistem paketlerini (Chromium dahil) kuruyoruz.
-# update ve install komutları tek bir katmanda zincirlenmeli.
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium-browser \
-    libnss3 \
-    libgconf-2-4 \
-    libasound2 \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+# Render Build sürecinde Python ortamını yapılandırıyoruz:
+USER root
 
 # Çalışma dizinini ayarlıyoruz
 WORKDIR /usr/src/app
 
 # requirements.txt dosyasını kopyalayıp Python bağımlılıklarını kuruyoruz
 COPY requirements.txt ./
+# Python kütüphanelerini kuruyoruz (Bu imajda zaten Python 3.11+ var)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Bot kodunu kopyalıyoruz
 COPY papel.py .
+# Proxy zip dosyalarını kopyalıyoruz
 COPY *.zip .
 
-# Start Command'ımız
-CMD ["python", "papel.py"]
+# Ortam değişkenini ayarlıyoruz (Bu imaj, botu başlatmak için varsayılan olarak Python'ı kullanır)
+ENV PATH="/usr/bin/python3:$PATH"
+
+# Botu çalıştırıyoruz
+CMD ["python3", "papel.py"]
