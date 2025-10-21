@@ -1,8 +1,11 @@
 # Temel Python imajını kullanıyoruz
 FROM python:3.11-slim
 
+# KRİTİK DNS ÇÖZÜMÜ: apt update başarısız olursa, DNS'i Google'a ayarlıyoruz.
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
 # Gerekli sistem paketlerini (Chromium dahil) kuruyoruz.
-# KRİTİK: update komutunu install ile aynı satırda zincirliyoruz ve geçici dosyaları temizliyoruz.
+# update ve install komutları tek bir katmanda zincirlenmeli.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium-browser \
     libnss3 \
