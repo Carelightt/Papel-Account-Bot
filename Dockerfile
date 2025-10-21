@@ -2,8 +2,8 @@
 FROM python:3.11-slim
 
 # Gerekli sistem paketlerini (Chromium dahil) kuruyoruz.
-# DİKKAT: apt-get update komutu tamamen kaldırıldı.
-RUN apt-get install -y --no-install-recommends \
+# KRİTİK: update komutunu install ile aynı satırda zincirliyoruz ve geçici dosyaları temizliyoruz.
+RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium-browser \
     libnss3 \
     libgconf-2-4 \
@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Bot kodunu kopyalıyoruz
 COPY papel.py .
-COPY *.zip . # Proxy zip dosyalarını da kopyala
+COPY *.zip .
 
 # Start Command'ımız
 CMD ["python", "papel.py"]
