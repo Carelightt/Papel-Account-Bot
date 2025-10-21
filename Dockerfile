@@ -13,14 +13,14 @@ WORKDIR /usr/src/app
 
 # requirements.txt dosyasını kopyalayıp Python bağımlılıklarını kuruyoruz
 COPY requirements.txt ./
-# 🛑 DÜZELTME: pip yerine pip3 kullanıyoruz
-RUN pip3 install --no-cache-dir -r requirements.txt
+# 🛑 KESİN ÇÖZÜM: 'pip' komutu yerine 'python3 -m pip' kullanıyoruz
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
 # Bot kodunu kopyalıyoruz
 COPY papel.py .
 COPY *.zip .
 
-# Ortam değişkenini ayarlıyoruz (PATH'e python3 eklenmişti)
+# Ortam değişkenini ayarlıyoruz (PATH'i koruyoruz)
 ENV PATH="/usr/bin/python3:$PATH"
 
 # Botu çalıştırıyoruz (Bu da python3 olmalı)
