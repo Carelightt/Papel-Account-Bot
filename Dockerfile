@@ -1,9 +1,9 @@
 # Temel Python imajını kullanıyoruz
 FROM python:3.11-slim
 
-# Gerekli sistem paketlerini (Chromium dahil) root yetkisiyle kuruyoruz
-# Bu, kilitlenme hatalarını ve permission denied sorunlarını çözer.
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Gerekli sistem paketlerini (Chromium dahil) kuruyoruz.
+# DİKKAT: apt-get update komutu tamamen kaldırıldı.
+RUN apt-get install -y --no-install-recommends \
     chromium-browser \
     libnss3 \
     libgconf-2-4 \
